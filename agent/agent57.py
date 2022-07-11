@@ -51,35 +51,57 @@ class Agent57():
         actors,
 
         # input_model
-        input_model=None,
-        input_model_emb=None,
-        input_model_rnd=None,
+#        input_model=None,
+#        input_model_emb=None,
+#        input_model_rnd=None,
+        input_model,
+        input_model_emb,
+        input_model_rnd,
 
         # optimizer
-        optimizer_ext=None,
-        optimizer_int=None,
-        optimizer_rnd=None,
-        optimizer_emb=None,
+#        optimizer_ext=None,
+#        optimizer_int=None,
+#        optimizer_rnd=None,
+#        optimizer_emb=None,
+        optimizer_ext,
+        optimizer_int,
+        optimizer_rnd,
+        optimizer_emb,
 
         # NN
-        batch_size=32,
-        input_sequence=4,    # 入力フレーム数
-        dense_units_num=512, # Dense層のユニット数
-        enable_dueling_network=True,                  # dueling network有効フラグ
+#        batch_size=32,
+#        input_sequence=4,    # 入力フレーム数
+#        dense_units_num=512, # Dense層のユニット数
+#        enable_dueling_network=True,                  # dueling network有効フラグ
         dueling_network_type=DuelingNetwork.AVERAGE,  # dueling networkで使うアルゴリズム
-        lstm_type=LstmType.NONE,  # LSTM有効フラグ
-        lstm_units_num=512,       # LSTMのユニット数
-        lstmful_input_length=80,  # ステートフルLSTMの入力数
+#        lstm_type=LstmType.NONE,  # LSTM有効フラグ
+#        lstm_units_num=512,       # LSTMのユニット数
+#        lstmful_input_length=80,  # ステートフルLSTMの入力数
+        batch_size,
+        input_sequence,    # 入力フレーム数
+        dense_units_num, # Dense層のユニット数
+        enable_dueling_network,                  # dueling network有効フラグ
+        lstm_type,  # LSTM有効フラグ
+        lstm_units_num,       # LSTMのユニット数
+        lstmful_input_length,  # ステートフルLSTMの入力数
 
         # train関係
-        memory_warmup_size=50000, # 初期メモリー確保用step数(学習しない)
-        target_model_update_interval=500,  # target networkのupdate間隔
-        enable_double_dqn=True,   # DDQN有効フラグ
-        enable_rescaling=False,   # rescalingを有効にするか
+#        memory_warmup_size=50000, # 初期メモリー確保用step数(学習しない)
+#        target_model_update_interval=500,  # target networkのupdate間隔
+#        enable_double_dqn=True,   # DDQN有効フラグ
+#        enable_rescaling=False,   # rescalingを有効にするか
+#        rescaling_epsilon=0.001,  # rescalingの定数
+#        priority_exponent=0.9,    # シーケンス長priorityを計算する際のη
+#        burnin_length=4,          # burn-in期間
+#        reward_multisteps=3,      # multistep reward
+        memory_warmup_size, # 初期メモリー確保用step数(学習しない)
+        target_model_update_interval,  # target networkのupdate間隔
+        enable_double_dqn,   # DDQN有効フラグ
+        enable_rescaling,   # rescalingを有効にするか
         rescaling_epsilon=0.001,  # rescalingの定数
         priority_exponent=0.9,    # シーケンス長priorityを計算する際のη
-        burnin_length=4,          # burn-in期間
-        reward_multisteps=3,      # multistep reward
+        burnin_length,          # burn-in期間
+        reward_multisteps,      # multistep reward
 
         # demo memory
         demo_memory="",
@@ -109,17 +131,25 @@ class Agent57():
         rnd_max_reward=5,
         policy_num=8,
         beta_max=0.3,
-        gamma0=0.9999,
-        gamma1=0.997,
-        gamma2=0.99,
-        ucb_epsilon=0.5,
+#        gamma0=0.9999,
+#        gamma1=0.997,
+#        gamma2=0.99,
+        gamma0,
+        gamma1,
+        gamma2,
+#        ucb_epsilon=0.5,
+        ucb_epsilon,
         ucb_beta=1,
-        ucb_window_size=90,
+#        ucb_window_size=90,
+        ucb_window_size,
 
-        sync_actor_model_interval=100,
+#        sync_actor_model_interval=100,
+        sync_actor_model_interval,
 
         # other
         processor=None,
+#        step_interval=1,
+#        enable_add_episode_end_frame=True,
         step_interval=1,
         enable_add_episode_end_frame=True,
         test_policy=0,
