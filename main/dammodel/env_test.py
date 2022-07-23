@@ -429,142 +429,142 @@ class dam(gym.Env):
     def _is_done(self):
         if (self.done==1):
 
-#            self.obs_all       = []
-#            self.obs_all.append([self.output_time,
-#                self.output_H_o,
-#                self.output_H_p,
-#                self.output_Qin_o,
-#                self.output_Qout_o,
-#                self.output_Qout_p,
-#                self.Qout_list,
-#                self.output_rain])
-#
-#            o_mx = 0
-#            self.qout_o_tmp = copy.deepcopy(self.output_Qout_o)
-#            for n in range(len(self.output_Qout_o)):
-#                if n == 0:
-#                    self.qout_o_tmp[0] = np.nan
-#                else:
-#                    if self.output_Qout_o[n]/self.output_Qout_o[n-1] > 2.0:
-#                        self.qout_o_tmp[n] = self.output_Qout_o[n]
-#                        self.qout_o_tmp[n-1] = self.output_Qout_o[n-1]
-#                    else:
-#                        self.qout_o_tmp[n] = np.nan
-#                    o_mx = max(o_mx, self.output_Qout_o[n]/self.output_Qout_o[n-1])
-#            self.qout_p_tmp = []
-#            p_mx = 0
-#            self.qout_p_tmp = copy.deepcopy(self.output_Qout_p)
-#            for n in range(len(self.output_Qout_p)):
-#                if n == 0:
-#                    self.qout_p_tmp[0] = np.nan
-#                else:
-#                    if self.output_Qout_p[n]/self.output_Qout_p[n-1] > 2.0:
-#                        self.qout_p_tmp[n] = self.output_Qout_p[n]
-#                        self.qout_p_tmp[n-1] = self.output_Qout_p[n-1]
-#                    else:
-#                        self.qout_p_tmp[n] = np.nan
-#                    p_mx = max(p_mx, self.output_Qout_p[n]/self.output_Qout_p[n-1])
-#            
-#            self.df_obs_all = pd.DataFrame(self.obs_all, columns=['date', 'H_org', 'H_dqn', 'QinDam', 'QoutDam_org', 'QoutDam_dqn', 'out_list', 'rain'])
-#            self.df_obs_all = self.df_obs_all.set_index('date')
-#            self.df_obs_all.to_csv("check.csv")
-#            #self.df_obs_all.to_csv(f'./{self.outf}//csv_{self.infilename}_reward{"{:05.1f}".format(self.reward)}_調節開始流量{"{:04}".format(self.kaishiQ)}_増放流開始水位{"{:.2f}".format(self.tadashiH)}_org被害額{"{:06.0f}".format(self.Qout_damage_org1+self.Qout_damage_org2)}_dqn被害額{"{:06.0f}".format(self.Qout_damage_dqn1+self.Qout_damage_dqn2)}.csv')
-#            #self.df_obs_all = self.df_obs_all[35:35+self.steps+288]
-#                                    
-#            #jisseki
-#            fig = plt.figure(figsize=(16.0, 8.0))
-#            grid = plt.GridSpec(4, 2, wspace=0.2, hspace=0.1)
-#            ax1 = plt.subplot(grid[1:, 0])
-#            ln1=ax1.plot(self.df_obs_all.index.values[0], self.df_obs_all['QinDam'].values[0], label='ダム流入量Q')
-#            ln1=ax1.plot(self.df_obs_all.index.values[0], self.df_obs_all['QoutDam_org'].values[0], label='ダム放流量Q(実績)')
-#            ln1=ax1.plot(self.df_obs_all.index.values[0], self.qout_o_tmp, color='red', label='放流量２倍以上')
-#            #ln1.legend(bbox_to_anchor=(1, 1), loc='upper right', borderaxespad=0, fontsize=12)
-#            ax2 = ax1.twinx()
-#            ln2=ax2.plot(self.df_obs_all.index.values[0], self.df_obs_all['H_org'].values[0],label='ダム水位H(実績)',color='black', zorder=1)
-#            ln2=ax2.plot([self.df_obs_all.index.values[0][0],self.df_obs_all.index.values[0][-1]], [self.Hs, self.Hs],label='洪水貯留準備水位',color='peachpuff')
-#            h1, l1 = ax1.get_legend_handles_labels()
-#            h2, l2 = ax2.get_legend_handles_labels()
-#            ax1.set_ylim(0, 500, 100)                                                            # y軸範囲の指定
-#            ax1.yaxis.set_ticks(np.arange(0, 500+0.0001, 100))                                 # y軸範囲の指定
-#            ax1.xaxis.set_ticks(np.arange(0, len(self.output_Qout_p), step=72))
-#            ax2.set_ylim(155, 180, 5)                                                            # y軸範囲の指定
-#            ax2.yaxis.set_ticks(np.arange(155, 180+0.0001, 5))                                 # y軸範囲の指定
-#            ax1.set_xlabel('time')
-#            ax1.set_ylabel(r'流量Q(m3/s)')
-#            ax1.grid(True)
-#            ax2.set_ylabel(r'水位H(m)')
-#            ax1.legend(h1+h2, l1+l2, bbox_to_anchor=(0, 1), loc='upper left', borderaxespad=0)
-#            #handler2, label2 = ax1.get_legend_handles_labels()
-#            #ax1.legend(handler2, label2, prop=fp2)                                                               # 凡例の表示
-#            #ax1.xaxis.set_major_locator(mdates.DayLocator(bymonthday=None, interval=1, tz=None))
-#            #ax1.xaxis.set_minor_locator(mdates.HourLocator(byhour=range(0, 24, 6), tz=None))
-#            #axs[1].xaxis.set_minor_locator(mdates.DayLocator(bymonthday=None, interval=1, tz=None))
-#            #ax1.xaxis.set_major_formatter(mdates.DateFormatter("%y-%m-%d"))
-#            #ax1.xaxis.set_major_locator(mdates.MonthLocator(interval=1))
-#            ax1.axes.xaxis.set_visible(True)
-#            ax1.xaxis.grid(b=True,which='major',color = "gray", alpha = 0.8)
-#            ax1.xaxis.grid(b=True,which='minor',color = "lightgray", alpha = 0.8, linestyle = "--")
-#            ax1.yaxis.grid(b=True,which='major',color = "gray", alpha = 0.8)
-#
-#            fig.text(0.47, 0.67, f'放流量最大増加率：{"{:.2f}".format(o_mx)}', ha='right', va='top', color="red")
-#            
-#            #yosoku
-#            ax3 = plt.subplot(grid[1:, 1])
-#            ln1=ax3.plot(self.df_obs_all.index.values[0], self.df_obs_all['QinDam'].values[0], label='ダム流入量Q')
-#            ln1=ax3.plot(self.df_obs_all.index.values[0], self.df_obs_all['QoutDam_dqn'].values[0], label='ダム放流量Q(AI操作)')
-#            ln1=ax3.plot(self.df_obs_all.index.values[0], self.qout_p_tmp, color='red', label='放流量２倍以上')
-#            #ln1.legend(bbox_to_anchor=(1, 1), loc='upper right', borderaxespad=0, fontsize=12)
-#            ax4 = ax3.twinx()
-#            ln2=ax4.plot(self.df_obs_all.index.values[0], self.df_obs_all['H_dqn'].values[0],label='ダム水位H(AI操作)',color='black')
-#            ln2=ax4.plot([self.df_obs_all.index.values[0][0],self.df_obs_all.index.values[0][-1]], [self.Hs, self.Hs],label='洪水貯留準備水位',color='peachpuff')
-#            h1, l1 = ax3.get_legend_handles_labels()
-#            h2, l2 = ax4.get_legend_handles_labels()
-#            ax3.set_ylim(0, 500, 100)                                                            # y軸範囲の指定
-#            ax3.yaxis.set_ticks(np.arange(0, 500+0.0001, 100))                                 # y軸範囲の指定
-#            #ax3.xaxis.set_ticks(np.arange(0, len(self.output_Qout_p), step=72), np.arange(0, int(len(self.output_Qout_p)/72)+1, step=1))
-#            ax3.xaxis.set_ticks(np.arange(0, len(self.output_Qout_p), step=72))
-#            ax4.set_ylim(155, 180, 5)                                                            # y軸範囲の指定
-#            ax4.yaxis.set_ticks(np.arange(155, 180+0.0001, 5))                                 # y軸範囲の指定
-#            ax3.set_xlabel('time')
-#            ax3.set_ylabel(r'流量Q(m3/s)')
-#            ax3.grid(True)
-#            ax4.set_ylabel(r'水位H(m)')
-#            ax3.legend(h1+h2, l1+l2, bbox_to_anchor=(0, 1), loc='upper left', borderaxespad=0)
-#            #handler2, label2 = ax3.get_legend_handles_labels()
-#            #ax3.legend(handler2, label2, prop=fp2)                                                               # 凡例の表示
-#            #ax3.xaxis.set_major_locator(mdates.DayLocator(bymonthday=None, interval=1, tz=None))
-#            #ax3.xaxis.set_minor_locator(mdates.HourLocator(byhour=range(0, 24, 6), tz=None))
-#            #axs[1].xaxis.set_minor_locator(mdates.DayLocator(bymonthday=None, interval=1, tz=None))
-#            #ax3.xaxis.set_major_formatter(mdates.DateFormatter("%y-%m-%d"))
-#            #ax3.xaxis.set_major_locator(mdates.MonthLocator(interval=1))
-#            ax3.axes.xaxis.set_visible(True)
-#            ax3.xaxis.grid(b=True,which='major',color = "gray", alpha = 0.8)
-#            ax3.xaxis.grid(b=True,which='minor',color = "lightgray", alpha = 0.8, linestyle = "--")
-#            ax3.yaxis.grid(b=True,which='major',color = "gray", alpha = 0.8)
-#
-#            fig.text(0.90, 0.67, f'放流量最大増加率：{"{:.2f}".format(p_mx)}', ha='right', va='top', color="red")
-#            
-#            #fig.text(0.9, 0.94, f'調節開始流量：{self.kaishiQ}(m3/s)  増放流開始水位：{"{:.2f}".format(self.tadashiH)}(m)', ha='right', va='top')
-#            #fig.text(0.9, 0.91, f'①被害軽減額(ダム直下～小田川合流)：{"{:06.0f}".format((self.Qout_damage_org1) - (self.Qout_damage_dqn1))}(百万円)  ②被害軽減額(小田川合流～河口)：{"{:06.0f}".format((self.Qout_damage_org2) - (self.Qout_damage_dqn2))}(百万円)  被害軽減額(①＋②)：{"{:06.0f}".format((self.Qout_damage_org1+self.Qout_damage_org2) - (self.Qout_damage_dqn1+self.Qout_damage_dqn2))}(百万円)', ha='right', va='top')
-#            
-#            #ax5 = plt.subplot(grid[0, 0])
-#            #ln5 = ax5.bar(self.df_obs_all.index.values[0], self.df_obs_all['rain'].values[0], width=1.0, label='rain')
-#            #ax5.set_ylim(0, 50, 10)                                                            # y軸範囲の指定
-#            #ax5.yaxis.set_ticks(np.arange(0, 50+0.0001, 10))                                 # y軸範囲の指定
-#            #ax5.axes.xaxis.set_visible(False)
-#            #ax5.invert_yaxis()
-#            #ax6 = plt.subplot(grid[0, 1])
-#            #ln6 = ax6.bar(self.df_obs_all.index.values[0], self.df_obs_all['rain'].values[0], width=1.0, label='rain')
-#            #ax6.set_ylim(0, 50, 10)                                                            # y軸範囲の指定
-#            #ax6.yaxis.set_ticks(np.arange(0, 50+0.0001, 10))                                 # y軸範囲の指定
-#            #ax6.axes.xaxis.set_visible(False)
-#            #ax6.invert_yaxis()
-#            
-#            fig.text(0.90, 0.75, f'報酬：{"{:.2f}".format(self.episode_reward)}', ha='right', va='top', color="red")
-#
-#            plt.tight_layout()
-#            plt.savefig(f'./out/tmp{self.count}.png', dpi=300, bbox_inches="tight", pad_inches=0.05)
-#            plt.close()
+            self.obs_all       = []
+            self.obs_all.append([self.output_time,
+                self.output_H_o,
+                self.output_H_p,
+                self.output_Qin_o,
+                self.output_Qout_o,
+                self.output_Qout_p,
+                self.Qout_list,
+                self.output_rain])
+
+            o_mx = 0
+            self.qout_o_tmp = copy.deepcopy(self.output_Qout_o)
+            for n in range(len(self.output_Qout_o)):
+                if n == 0:
+                    self.qout_o_tmp[0] = np.nan
+                else:
+                    if self.output_Qout_o[n]/self.output_Qout_o[n-1] > 2.0:
+                        self.qout_o_tmp[n] = self.output_Qout_o[n]
+                        self.qout_o_tmp[n-1] = self.output_Qout_o[n-1]
+                    else:
+                        self.qout_o_tmp[n] = np.nan
+                    o_mx = max(o_mx, self.output_Qout_o[n]/self.output_Qout_o[n-1])
+            self.qout_p_tmp = []
+            p_mx = 0
+            self.qout_p_tmp = copy.deepcopy(self.output_Qout_p)
+            for n in range(len(self.output_Qout_p)):
+                if n == 0:
+                    self.qout_p_tmp[0] = np.nan
+                else:
+                    if self.output_Qout_p[n]/self.output_Qout_p[n-1] > 2.0:
+                        self.qout_p_tmp[n] = self.output_Qout_p[n]
+                        self.qout_p_tmp[n-1] = self.output_Qout_p[n-1]
+                    else:
+                        self.qout_p_tmp[n] = np.nan
+                    p_mx = max(p_mx, self.output_Qout_p[n]/self.output_Qout_p[n-1])
+            
+            self.df_obs_all = pd.DataFrame(self.obs_all, columns=['date', 'H_org', 'H_dqn', 'QinDam', 'QoutDam_org', 'QoutDam_dqn', 'out_list', 'rain'])
+            self.df_obs_all = self.df_obs_all.set_index('date')
+            self.df_obs_all.to_csv("check.csv")
+            #self.df_obs_all.to_csv(f'./{self.outf}//csv_{self.infilename}_reward{"{:05.1f}".format(self.reward)}_調節開始流量{"{:04}".format(self.kaishiQ)}_増放流開始水位{"{:.2f}".format(self.tadashiH)}_org被害額{"{:06.0f}".format(self.Qout_damage_org1+self.Qout_damage_org2)}_dqn被害額{"{:06.0f}".format(self.Qout_damage_dqn1+self.Qout_damage_dqn2)}.csv')
+            #self.df_obs_all = self.df_obs_all[35:35+self.steps+288]
+                                    
+            #jisseki
+            fig = plt.figure(figsize=(16.0, 8.0))
+            grid = plt.GridSpec(4, 2, wspace=0.2, hspace=0.1)
+            ax1 = plt.subplot(grid[1:, 0])
+            ln1=ax1.plot(self.df_obs_all.index.values[0], self.df_obs_all['QinDam'].values[0], label='ダム流入量Q')
+            ln1=ax1.plot(self.df_obs_all.index.values[0], self.df_obs_all['QoutDam_org'].values[0], label='ダム放流量Q(実績)')
+            ln1=ax1.plot(self.df_obs_all.index.values[0], self.qout_o_tmp, color='red', label='放流量２倍以上')
+            #ln1.legend(bbox_to_anchor=(1, 1), loc='upper right', borderaxespad=0, fontsize=12)
+            ax2 = ax1.twinx()
+            ln2=ax2.plot(self.df_obs_all.index.values[0], self.df_obs_all['H_org'].values[0],label='ダム水位H(実績)',color='black', zorder=1)
+            ln2=ax2.plot([self.df_obs_all.index.values[0][0],self.df_obs_all.index.values[0][-1]], [self.Hs, self.Hs],label='洪水貯留準備水位',color='peachpuff')
+            h1, l1 = ax1.get_legend_handles_labels()
+            h2, l2 = ax2.get_legend_handles_labels()
+            ax1.set_ylim(0, 500, 100)                                                            # y軸範囲の指定
+            ax1.yaxis.set_ticks(np.arange(0, 500+0.0001, 100))                                 # y軸範囲の指定
+            ax1.xaxis.set_ticks(np.arange(0, len(self.output_Qout_p), step=72))
+            ax2.set_ylim(155, 180, 5)                                                            # y軸範囲の指定
+            ax2.yaxis.set_ticks(np.arange(155, 180+0.0001, 5))                                 # y軸範囲の指定
+            ax1.set_xlabel('time')
+            ax1.set_ylabel(r'流量Q(m3/s)')
+            ax1.grid(True)
+            ax2.set_ylabel(r'水位H(m)')
+            ax1.legend(h1+h2, l1+l2, bbox_to_anchor=(0, 1), loc='upper left', borderaxespad=0)
+            #handler2, label2 = ax1.get_legend_handles_labels()
+            #ax1.legend(handler2, label2, prop=fp2)                                                               # 凡例の表示
+            #ax1.xaxis.set_major_locator(mdates.DayLocator(bymonthday=None, interval=1, tz=None))
+            #ax1.xaxis.set_minor_locator(mdates.HourLocator(byhour=range(0, 24, 6), tz=None))
+            #axs[1].xaxis.set_minor_locator(mdates.DayLocator(bymonthday=None, interval=1, tz=None))
+            #ax1.xaxis.set_major_formatter(mdates.DateFormatter("%y-%m-%d"))
+            #ax1.xaxis.set_major_locator(mdates.MonthLocator(interval=1))
+            ax1.axes.xaxis.set_visible(True)
+            ax1.xaxis.grid(b=True,which='major',color = "gray", alpha = 0.8)
+            ax1.xaxis.grid(b=True,which='minor',color = "lightgray", alpha = 0.8, linestyle = "--")
+            ax1.yaxis.grid(b=True,which='major',color = "gray", alpha = 0.8)
+
+            fig.text(0.47, 0.67, f'放流量最大増加率：{"{:.2f}".format(o_mx)}', ha='right', va='top', color="red")
+            
+            #yosoku
+            ax3 = plt.subplot(grid[1:, 1])
+            ln1=ax3.plot(self.df_obs_all.index.values[0], self.df_obs_all['QinDam'].values[0], label='ダム流入量Q')
+            ln1=ax3.plot(self.df_obs_all.index.values[0], self.df_obs_all['QoutDam_dqn'].values[0], label='ダム放流量Q(AI操作)')
+            ln1=ax3.plot(self.df_obs_all.index.values[0], self.qout_p_tmp, color='red', label='放流量２倍以上')
+            #ln1.legend(bbox_to_anchor=(1, 1), loc='upper right', borderaxespad=0, fontsize=12)
+            ax4 = ax3.twinx()
+            ln2=ax4.plot(self.df_obs_all.index.values[0], self.df_obs_all['H_dqn'].values[0],label='ダム水位H(AI操作)',color='black')
+            ln2=ax4.plot([self.df_obs_all.index.values[0][0],self.df_obs_all.index.values[0][-1]], [self.Hs, self.Hs],label='洪水貯留準備水位',color='peachpuff')
+            h1, l1 = ax3.get_legend_handles_labels()
+            h2, l2 = ax4.get_legend_handles_labels()
+            ax3.set_ylim(0, 500, 100)                                                            # y軸範囲の指定
+            ax3.yaxis.set_ticks(np.arange(0, 500+0.0001, 100))                                 # y軸範囲の指定
+            #ax3.xaxis.set_ticks(np.arange(0, len(self.output_Qout_p), step=72), np.arange(0, int(len(self.output_Qout_p)/72)+1, step=1))
+            ax3.xaxis.set_ticks(np.arange(0, len(self.output_Qout_p), step=72))
+            ax4.set_ylim(155, 180, 5)                                                            # y軸範囲の指定
+            ax4.yaxis.set_ticks(np.arange(155, 180+0.0001, 5))                                 # y軸範囲の指定
+            ax3.set_xlabel('time')
+            ax3.set_ylabel(r'流量Q(m3/s)')
+            ax3.grid(True)
+            ax4.set_ylabel(r'水位H(m)')
+            ax3.legend(h1+h2, l1+l2, bbox_to_anchor=(0, 1), loc='upper left', borderaxespad=0)
+            #handler2, label2 = ax3.get_legend_handles_labels()
+            #ax3.legend(handler2, label2, prop=fp2)                                                               # 凡例の表示
+            #ax3.xaxis.set_major_locator(mdates.DayLocator(bymonthday=None, interval=1, tz=None))
+            #ax3.xaxis.set_minor_locator(mdates.HourLocator(byhour=range(0, 24, 6), tz=None))
+            #axs[1].xaxis.set_minor_locator(mdates.DayLocator(bymonthday=None, interval=1, tz=None))
+            #ax3.xaxis.set_major_formatter(mdates.DateFormatter("%y-%m-%d"))
+            #ax3.xaxis.set_major_locator(mdates.MonthLocator(interval=1))
+            ax3.axes.xaxis.set_visible(True)
+            ax3.xaxis.grid(b=True,which='major',color = "gray", alpha = 0.8)
+            ax3.xaxis.grid(b=True,which='minor',color = "lightgray", alpha = 0.8, linestyle = "--")
+            ax3.yaxis.grid(b=True,which='major',color = "gray", alpha = 0.8)
+
+            fig.text(0.90, 0.67, f'放流量最大増加率：{"{:.2f}".format(p_mx)}', ha='right', va='top', color="red")
+            
+            #fig.text(0.9, 0.94, f'調節開始流量：{self.kaishiQ}(m3/s)  増放流開始水位：{"{:.2f}".format(self.tadashiH)}(m)', ha='right', va='top')
+            #fig.text(0.9, 0.91, f'①被害軽減額(ダム直下～小田川合流)：{"{:06.0f}".format((self.Qout_damage_org1) - (self.Qout_damage_dqn1))}(百万円)  ②被害軽減額(小田川合流～河口)：{"{:06.0f}".format((self.Qout_damage_org2) - (self.Qout_damage_dqn2))}(百万円)  被害軽減額(①＋②)：{"{:06.0f}".format((self.Qout_damage_org1+self.Qout_damage_org2) - (self.Qout_damage_dqn1+self.Qout_damage_dqn2))}(百万円)', ha='right', va='top')
+            
+            #ax5 = plt.subplot(grid[0, 0])
+            #ln5 = ax5.bar(self.df_obs_all.index.values[0], self.df_obs_all['rain'].values[0], width=1.0, label='rain')
+            #ax5.set_ylim(0, 50, 10)                                                            # y軸範囲の指定
+            #ax5.yaxis.set_ticks(np.arange(0, 50+0.0001, 10))                                 # y軸範囲の指定
+            #ax5.axes.xaxis.set_visible(False)
+            #ax5.invert_yaxis()
+            #ax6 = plt.subplot(grid[0, 1])
+            #ln6 = ax6.bar(self.df_obs_all.index.values[0], self.df_obs_all['rain'].values[0], width=1.0, label='rain')
+            #ax6.set_ylim(0, 50, 10)                                                            # y軸範囲の指定
+            #ax6.yaxis.set_ticks(np.arange(0, 50+0.0001, 10))                                 # y軸範囲の指定
+            #ax6.axes.xaxis.set_visible(False)
+            #ax6.invert_yaxis()
+            
+            fig.text(0.90, 0.75, f'報酬：{"{:.2f}".format(self.episode_reward)}', ha='right', va='top', color="red")
+
+            plt.tight_layout()
+            plt.savefig(f'./out/tmp{self.count}.png', dpi=300, bbox_inches="tight", pad_inches=0.05)
+            plt.close()
 #
 #
 #            #if os.path.exists(f'./{self.outf}/out.csv'):

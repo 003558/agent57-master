@@ -1,7 +1,9 @@
+import os
+os.add_dll_directory(os.path.join(os.environ['CUDA_PATH'], 'bin'))
+
 import gym
 from keras.optimizers import Adam
 
-import os
 import sys
 sys.path.append(os.path.join(os.path.dirname(__file__), '../'))
 
@@ -19,8 +21,10 @@ from agent.processor import PendulumProcessorForDQN
 
 import dammodel
 
+
 seed_everything(42)
 ENV_NAME  = 'dam-v0'
+TEST_ENV_NAME  = 'damtest-v0'
 episode_save_dir = "tmp_{}.".format(ENV_NAME)
 
 
@@ -48,12 +52,12 @@ def create_parameter(env, nb_steps):
 
         # NN
         "batch_size": 16,     # batch_size
-        "input_sequence": 4,         # 入力フレーム数
-        "dense_units_num": 32,       # dense層のユニット数
+        "input_sequence": 18,         # 入力フレーム数
+        "dense_units_num": 200,       # dense層のユニット数
         "enable_dueling_network": True,
-        "lstm_type": LstmType.STATELESS,           # 使用するLSTMアルゴリズム
+        "lstm_type": LstmType.STATEFUL,           # 使用するLSTMアルゴリズム
         "lstm_units_num": 32,             # LSTMのユニット数
-        "lstmful_input_length": 1,       # ステートフルLSTMの入力数
+        "lstmful_input_length": 12,       # ステートフルLSTMの入力数
 
         # train
         "memory_warmup_size": 1000,    # 初期のメモリー確保用step数(学習しない)
@@ -119,7 +123,7 @@ def run_dqn(enable_train):
     print("action_space      : " + str(env.action_space))
     print("observation_space : " + str(env.observation_space))
     print("reward_range      : " + str(env.reward_range))
-    nb_steps = 100_000
+    nb_steps = 100_000_000
 
     kwargs = create_parameter(env, nb_steps)
     kwargs["action_policy"] = AnnealingEpsilonGreedy(
@@ -166,10 +170,34 @@ class MyActor2(MyActor):
     def getPolicy(self, actor_index, actor_num):
         return EpsilonGreedy(0.1)
 
+class MyActor3(MyActor):
+    def getPolicy(self, actor_index, actor_num):
+        return EpsilonGreedy(0.1)
+    
+class MyActor4(MyActor):
+    def getPolicy(self, actor_index, actor_num):
+        return EpsilonGreedy(0.1)
+class MyActor5(MyActor):
+    def getPolicy(self, actor_index, actor_num):
+        return EpsilonGreedy(0.01)
+
+class MyActor6(MyActor):
+    def getPolicy(self, actor_index, actor_num):
+        return EpsilonGreedy(0.1)
+
+class MyActor7(MyActor):
+    def getPolicy(self, actor_index, actor_num):
+        return EpsilonGreedy(0.1)
+    
+class MyActor8(MyActor):
+    def getPolicy(self, actor_index, actor_num):
+        return EpsilonGreedy(0.1)
 
 def create_env():
     return gym.make(ENV_NAME)
 
+def create_test_env():
+    return gym.make(TEST_ENV_NAME)
 
 def run_agent57(enable_train):
     env = gym.make(ENV_NAME)
@@ -178,11 +206,11 @@ def run_agent57(enable_train):
     print("action_space      : " + str(env.action_space))
     print("observation_space : " + str(env.observation_space))
     print("reward_range      : " + str(env.reward_range))
-    nb_trains = 20000
+    nb_trains = 50000000000000000000
 
     kwargs = create_parameter(env, nb_trains)
 
-    kwargs["actors"] = [MyActor1, MyActor2]
+    kwargs["actors"] = [MyActor1, MyActor2, MyActor3, MyActor4, MyActor5, MyActor6, MyActor7, MyActor8]
     kwargs["sync_actor_model_interval"] = 50  # learner から model を同期する間隔
 
     run_gym_agent57(
@@ -194,8 +222,8 @@ def run_agent57(enable_train):
         nb_time=60*60,
         logger_type=LoggerType.STEP,
         log_interval=1000,
-        test_env=create_env,
-        is_load_weights=False,
+        test_env=create_test_env,
+        is_load_weights=True,
         movie_save=False,
     )
     env.close()
@@ -217,12 +245,12 @@ if __name__ == '__main__':
         run_replay(episode_save_dir)
 
     # SingleActorレーニング
-    if True:
+    if False:
         run_dqn(enable_train=True)
         #run_dqn(enable_train=False)  # test only
 
     # 複数Actorレーニング
-    if False:
+    if True:
         run_agent57(enable_train=True)
         #run_agent57(enable_train=False)  # test only
 

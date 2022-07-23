@@ -6,5 +6,5 @@ register(
 )
 register(
     id='damtest-v0',
-    entry_point='dammodel.env:damtest',
+    entry_point='dammodel.env_test:damtest',
 )
